@@ -43,6 +43,7 @@ def return_data(args):
     batch_size = args.batch_size
     num_workers = args.num_workers
     image_size = args.image_size
+
     assert image_size == 64, 'currently only image size of 64 is supported'
 
     if name.lower() == '3dchairs':
@@ -74,8 +75,14 @@ def return_data(args):
         dset = CustomTensorDataset
 
     else:
-        raise NotImplementedError
+        print("using custom dataset!!")
+        from custom_dataset import VAEDataset
+        dset = VAEDataset(image_dir=dset_dir, train_batch_size=batch_size, val_batch_size=batch_size, patch_size=image_size,
+                   num_workers=num_workers, pin_memory=True)
+        dset.setup(normalise=False)
+        data_loader = dset.train_dataloader()
 
+        return data_loader
 
     train_data = dset(**train_kwargs)
     train_loader = DataLoader(train_data,

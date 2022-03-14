@@ -98,7 +98,9 @@ class Solver(object):
             self.nc = 3
             self.decoder_dist = 'gaussian'
         else:
-            raise NotImplementedError
+            print("Assuming three channel & gaussian output dist.")
+            self.nc = 3
+            self.decoder_dist = 'gaussian'
 
         if args.model == 'H':
             net = BetaVAE_H
